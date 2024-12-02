@@ -7,8 +7,8 @@ import (
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/pointidentity/pidx-node/x/types"
-	"github.com/pointidentity/pidx-nodee/x/utils"
-	"github.com/pointidentity/pidx-nodee/x/verification"
+	"github.com/pointidentity/pidx-node/x/utils"
+	"github.com/pointidentity/pidx-node/x/verification"
 )
 
 // RegisterDID is a RPC method for registration of a DID Document
