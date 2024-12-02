@@ -14,7 +14,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	ethercrypto "github.com/ethereum/go-ethereum/crypto"
 	bbs "github.com/hyperledger/aries-framework-go/component/kmscrypto/crypto/primitive/bbs12381g2pub"
-	"github.com/pointidentity/pidx-node/x/types"
+	"github.com/pointidentity/pidx-node/x/ssi/types"
 	"github.com/iden3/go-iden3-crypto/babyjub"
 	"github.com/multiformats/go-multibase"
 	"github.com/spf13/cobra"
