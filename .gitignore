@@ -1,0 +1,37 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.wasm
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+vue
+
+# vue/src/store/generated
+release/
+.idea/
+.vscode
+.DS_Store
+
+# JSON files
+tests/load_tests/*.json
+
+# Build Folder
+build
+dist/
+
+# Misc
+.cache/
+__pycache__
+artifacts
+node_modules
+package-lock.json
+generated-ts

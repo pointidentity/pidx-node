@@ -1,0 +1,116 @@
+#!/usr/bin/make -f
+
+VERSION := $(shell git describe --tags --abbrev=0)
+COMMIT := $(shell git rev-parse --short HEAD)
+
+BUILD_DIR ?= $(CURDIR)/build
+PIDXNODE_CMD_DIR := $(CURDIR)/cmd/pidx-noded
+GO_MINOR_VERSION = $(shell go version | cut -c 14- | cut -d' ' -f1 | cut -d'.' -f2)
+
+GOBIN = $(shell go env GOPATH)/bin
+GOOS = $(shell go env GOOS)
+GOARCH = $(shell go env GOARCH)
+
+SDK_VERSION := $(shell go list -m github.com/cosmos/cosmos-sdk | sed 's:.* ::')
+BFT_VERSION := $(shell go list -m github.com/cometbft/cometbft | sed 's:.* ::')
+
+ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=pidx-node \
+	-X github.com/cosmos/cosmos-sdk/version.AppName=pidx-node \
+	-X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
+	-X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT) \
+	-X github.com/cometbft/cometbft/version.TMCoreSemVer=$(BFT_VERSION)
+
+BUILD_FLAGS := -ldflags '$(ldflags)'
+
+export GO111MODULE=on
+
+###############################################################################
+###                                  Build                                  ###
+###############################################################################
+.PHONY: build install 
+
+all: proto-gen-go proto-gen-swagger build
+
+go-version-check:
+ifneq ($(GO_MINOR_VERSION),21)
+	@echo "ERROR: Go version 1.21 is required to build pidx-noded binary"
+	exit 1
+endif
+
+go.sum: go.mod
+		@echo "--> Ensure dependencies have not been modified"
+		@go mod verify
+
+install: go.sum go-version-check
+	go install -mod=readonly $(BUILD_FLAGS) $(PIDXNODE_CMD_DIR)	
+
+build: go-version-check
+	go build -mod=readonly $(BUILD_FLAGS) -o $(BUILD_DIR)/pidx-noded $(PIDXNODE_CMD_DIR)
+
+###############################################################################
+###                                  Proto                                  ###
+###############################################################################
+
+proto-gen-go:
+	@echo "Generating golang code from protobuf"
+	./scripts/protocgen-go.sh
+
+proto-gen-swagger:
+	@echo "Generating swagger docs"
+	./scripts/protocgen-swagger.sh
+
+proto-gen-ts:
+	@echo "Generating typescript code from protobuf"
+	./scripts/protocgen-ts.sh
+
+###############################################################################
+###                                  Docker                                 ###
+###############################################################################
+DOCKER_IMAGE_NAME := pidx-node-image
+
+docker-all: docker-build docker-run
+
+docker-build:
+	docker build -t $(DOCKER_IMAGE_NAME) .
+
+docker-run:
+	docker run --rm -d \
+	-p 26657:26657 -p 1317:1317 -p 26656:26656 -p 9090:9090 \
+	--name pidx-node-container \
+	$(DOCKER_IMAGE_NAME) start
+
+###############################################################################
+###                                  Release                                ###
+###############################################################################
+GO_VERSION := $(shell cat go.mod | grep -E 'go [0-9].[0-9]+' | cut -d ' ' -f 2)
+GORELEASER_IMAGE := ghcr.io/goreleaser/goreleaser-cross:v$(GO_VERSION)
+COSMWASM_VERSION := $(shell go list -m github.com/CosmWasm/wasmvm | sed 's/.* //')
+
+ifdef GITHUB_TOKEN
+release:
+	docker run \
+		--rm \
+		-e GITHUB_TOKEN=$(GITHUB_TOKEN) \
+		-e COSMWASM_VERSION=$(COSMWASM_VERSION) \
+		-v /var/run/docker.sock:/var/run/docker.sock \
+		-v `pwd`:/go/src/pidx-noded \
+		-w /go/src/pidx-noded \
+		$(GORELEASER_IMAGE) \
+		release \
+		--clean
+else
+release:
+	@echo "Error: GITHUB_TOKEN is not defined. Please define it before running 'make release'."
+endif
+
+release-dry-run:
+	docker run \
+		--rm \
+		-e COSMWASM_VERSION=$(COSMWASM_VERSION) \
+		-v /var/run/docker.sock:/var/run/docker.sock \
+		-v `pwd`:/go/src/pidx-noded \
+		-w /go/src/pidx-noded \
+		$(GORELEASER_IMAGE) \
+		release \
+		--clean \
+		--skip=publish
