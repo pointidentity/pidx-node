@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	ldcontext "github.com/pointidentity/pidx-node/x/ld-context"
-	"github.com/pointidentity/pidx-node/x/types"
+	ldcontext "github.com/pointidentity/pidx-node/x/ssi/ld-context"
+	"github.com/pointidentity/pidx-node/x/ssi/types"
 )
 
 func formDidId(didNamespace string, publicKeyMultibase string) string {

@@ -12,7 +12,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	ibcante "github.com/cosmos/ibc-go/v7/modules/core/ante"
-	ssiante "github.com/pointidentity/pidx-node/x/ante"
+	ssiante "github.com/pointidentity/pidx-node/x/ssi/ante"
 )
 
 // HandlerOptions extend the SDK's AnteHandler options by requiring the IBC

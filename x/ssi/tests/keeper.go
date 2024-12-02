@@ -1,4 +1,4 @@
-package keeper
+package tests
 
 import (
 	"testing"
@@ -13,11 +13,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	typesparams "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/pointidentity/pidx-node/x/ssi/keeper"
-	"github.com/hpointidentity/pidx-node/x/ssi/types"
+	"github.com/pointidentity/pidx-node/x/ssi/types"
 	"github.com/stretchr/testify/require"
 )
 
-func SsiKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
+func TestKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 	storeKey := sdk.NewKVStoreKey(types.StoreKey)
 	memStoreKey := storetypes.NewMemoryStoreKey(types.MemStoreKey)
 
@@ -47,6 +47,7 @@ func SsiKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 		cmtproto.Header{
 			ChainID: "pidxnode",
 		}, false, log.NewNopLogger())
-
+	
+	k.SetChainNamespace(&ctx, "devnet")
 	return k, ctx
 }

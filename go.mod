@@ -1,6 +1,6 @@
-module github.com/pointidentity/pidx-node
+module github.com/hypersign-protocol/hid-node
 
-go 1.22
+go 1.21
 
 require (
 	cosmossdk.io/api v0.3.1

@@ -10,7 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/pointidentity/pidx-node/app"
-	"github.com/pointidentity/pidx-node/x/types"
+	"github.com/pointidentity/pidx-node/x/ssi/types"
 	"github.com/multiformats/go-multibase"
 	"github.com/spf13/cobra"
 

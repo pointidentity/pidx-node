@@ -32,8 +32,8 @@ export GO111MODULE=on
 all: proto-gen-go proto-gen-swagger build
 
 go-version-check:
-ifneq ($(GO_MINOR_VERSION),22)
-	@echo "ERROR: Go version 1.22 is required to build pidx-noded binary"
+ifneq ($(GO_MINOR_VERSION),21)
+	@echo "ERROR: Go version 1.21 is required to build pidx-noded binary"
 	exit 1
 endif
 

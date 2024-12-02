@@ -121,9 +121,9 @@ import (
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
 	"github.com/pointidentity/pidx-node/app/client/docs"
-	"github.com/pointidentity/pidx-node/x"
-	ssikeeper "github.com/pointidentity/pidx-node/x/keeper"
-	ssitypes "github.com/pointidentity/pidx-node/types"
+	"github.com/pointidentity/pidx-node/x/ssi"
+	ssikeeper "github.com/pointidentity/pidx-node/x/ssi/keeper"
+	ssitypes "github.com/pointidentity/pidx-node/x/ssi/types"
 )
 
 const appName = "PointidentityApp"
