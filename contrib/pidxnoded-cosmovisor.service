@@ -1,0 +1,17 @@
+[Unit]
+Description=Point Identity Network
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Environment="DAEMON_HOME=/home/ubuntu/.pidx-node"
+Environment="DAEMON_NAME=pidx-noded"
+User=ubuntu
+Type=simple
+Restart=on-failure
+RestartSec=3
+LimitNOFILE=65535
+ExecStart=cosmovisor run start
+
+[Install]
+WantedBy=multi-user.target
