@@ -4,7 +4,7 @@ VERSION := $(shell git describe --tags --abbrev=0)
 COMMIT := $(shell git rev-parse --short HEAD)
 
 BUILD_DIR ?= $(CURDIR)/build
-HIDNODE_CMD_DIR := $(CURDIR)/cmd/hid-noded
+PIDXNODE_CMD_DIR := $(CURDIR)/cmd/pidx-noded
 GO_MINOR_VERSION = $(shell go version | cut -c 14- | cut -d' ' -f1 | cut -d'.' -f2)
 
 GOBIN = $(shell go env GOPATH)/bin
@@ -14,8 +14,8 @@ GOARCH = $(shell go env GOARCH)
 SDK_VERSION := $(shell go list -m github.com/cosmos/cosmos-sdk | sed 's:.* ::')
 BFT_VERSION := $(shell go list -m github.com/cometbft/cometbft | sed 's:.* ::')
 
-ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=hid-node \
-	-X github.com/cosmos/cosmos-sdk/version.AppName=hid-node \
+ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=pidx-node \
+	-X github.com/cosmos/cosmos-sdk/version.AppName=pidx-node \
 	-X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
 	-X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT) \
 	-X github.com/cometbft/cometbft/version.TMCoreSemVer=$(BFT_VERSION)
@@ -33,7 +33,7 @@ all: proto-gen-go proto-gen-swagger build
 
 go-version-check:
 ifneq ($(GO_MINOR_VERSION),21)
-	@echo "ERROR: Go version 1.21 is required to build hid-noded binary"
+	@echo "ERROR: Go version 1.21 is required to build pidx-noded binary"
 	exit 1
 endif
 
@@ -42,10 +42,10 @@ go.sum: go.mod
 		@go mod verify
 
 install: go.sum go-version-check
-	go install -mod=readonly $(BUILD_FLAGS) $(HIDNODE_CMD_DIR)	
+	go install -mod=readonly $(BUILD_FLAGS) $(PIDXNODE_CMD_DIR)	
 
 build: go-version-check
-	go build -mod=readonly $(BUILD_FLAGS) -o $(BUILD_DIR)/hid-noded $(HIDNODE_CMD_DIR)
+	go build -mod=readonly $(BUILD_FLAGS) -o $(BUILD_DIR)/pidx-noded $(PIDXNODE_CMD_DIR)
 
 ###############################################################################
 ###                                  Proto                                  ###
@@ -66,7 +66,7 @@ proto-gen-ts:
 ###############################################################################
 ###                                  Docker                                 ###
 ###############################################################################
-DOCKER_IMAGE_NAME := hid-node-image
+DOCKER_IMAGE_NAME := pidx-node-image
 
 docker-all: docker-build docker-run
 
@@ -76,7 +76,7 @@ docker-build:
 docker-run:
 	docker run --rm -d \
 	-p 26657:26657 -p 1317:1317 -p 26656:26656 -p 9090:9090 \
-	--name hid-node-container \
+	--name pidx-node-container \
 	$(DOCKER_IMAGE_NAME) start
 
 ###############################################################################
@@ -93,8 +93,8 @@ release:
 		-e GITHUB_TOKEN=$(GITHUB_TOKEN) \
 		-e COSMWASM_VERSION=$(COSMWASM_VERSION) \
 		-v /var/run/docker.sock:/var/run/docker.sock \
-		-v `pwd`:/go/src/hid-noded \
-		-w /go/src/hid-noded \
+		-v `pwd`:/go/src/pidx-noded \
+		-w /go/src/pidx-noded \
 		$(GORELEASER_IMAGE) \
 		release \
 		--clean
@@ -108,8 +108,8 @@ release-dry-run:
 		--rm \
 		-e COSMWASM_VERSION=$(COSMWASM_VERSION) \
 		-v /var/run/docker.sock:/var/run/docker.sock \
-		-v `pwd`:/go/src/hid-noded \
-		-w /go/src/hid-noded \
+		-v `pwd`:/go/src/pidx-noded \
+		-w /go/src/pidx-noded \
 		$(GORELEASER_IMAGE) \
 		release \
 		--clean \

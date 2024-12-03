@@ -8,7 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/pointidentity/pidx-node/x/ssi/types"
-	"github.com/hpointidentity/pidx-node/x/ssi/verification"
+	"github.com/pointidentity/pidx-node/x/ssi/verification"
 )
 
 // RPC controller for deactivating an existing DID document registered on pidx-node

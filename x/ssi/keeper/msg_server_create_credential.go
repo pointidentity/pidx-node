@@ -9,7 +9,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/pointidentity/pidx-node/x/ssi/types"
-	"github.com/pointidentity/pidx-nodee/x/ssi/verification"
+	"github.com/pointidentity/pidx-node/x/ssi/verification"
 )
 
 func (k msgServer) RegisterCredentialStatus(goCtx context.Context, msg *types.MsgRegisterCredentialStatus) (*types.MsgRegisterCredentialStatusResponse, error) {

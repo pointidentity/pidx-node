@@ -140,9 +140,9 @@ func showDidByAliasCmd() *cobra.Command {
 }
 
 func generateDidCmd() *cobra.Command {
-	exampleString1 := "hid-noded ssi-tools generate-did --from hid1kspgn6f5hmurulx4645ch6rf0kt90jpv5ydykp --keyring-backend test --did-alias example1"
-	exampleString2 := "hid-noded ssi-tools generate-did --from node1 --keyring-backend test --did-alias example2"
-	exampleString3 := "hid-noded ssi-tools generate-did --from node1 --keyring-backend test --did-alias example3 --did-namespace devnet"
+	exampleString1 := "pidx-noded ssi-tools generate-did --from pidx1kspgn6f5hmurulx4645ch6rf0kt90jpv5ydykp --keyring-backend test --did-alias example1"
+	exampleString2 := "pidx-noded ssi-tools generate-did --from node1 --keyring-backend test --did-alias example2"
+	exampleString3 := "pidx-noded ssi-tools generate-did --from node1 --keyring-backend test --did-alias example3 --did-namespace devnet"
 
 	cmd := &cobra.Command{
 		Use:     "generate-did",
@@ -181,7 +181,7 @@ func generateDidCmd() *cobra.Command {
 
 			// Get Public Key from keyring account
 			var kr keyring.Keyring
-			appName := "hid-noded-keyring"
+			appName := "pidx-noded-keyring"
 			didAliasConfig, err := types.GetDidAliasConfig(cmd)
 			if err != nil {
 				return err
@@ -189,7 +189,7 @@ func generateDidCmd() *cobra.Command {
 
 			switch keyringBackend {
 			case "test":
-				kr, err = keyring.New(appName, "test", didAliasConfig.HidNodeConfigDir, nil, app.MakeEncodingConfig().Codec)
+				kr, err = keyring.New(appName, "test", didAliasConfig.PidxNodeConfigDir, nil, app.MakeEncodingConfig().Codec)
 				if err != nil {
 					return err
 				}
